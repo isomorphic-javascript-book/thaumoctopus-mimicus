@@ -1,0 +1,32 @@
+{
+  "name": "thaumoctopus-mimicus",
+  "version": "0.1.0",
+  "description": "Isomorphic JavaScript application example",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isomorphic-javascript-book/thaumoctopus-mimicus.git"
+  },
+  "keywords": [
+    "isomorphic",
+    "javascript"
+  ],
+  "author": "Jason Strimpel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isomorphic-javascript-book/thaumoctopus-mimicus/issues"
+  },
+  "homepage": "https://github.com/isomorphic-javascript-book/thaumoctopus-mimicus",
+  "dependencies": {
+    "hapi": "^8.8.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-nodemon": "^2.0.3"
+  }
+}
