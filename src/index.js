@@ -1,5 +1,6 @@
 import Hapi from 'hapi';
 import nunjucks from 'nunjucks';
+import Application from './lib';
 
 // configure nunjucks to read from the dist directory
 nunjucks.configure('./dist');
@@ -32,18 +33,17 @@ function getName(request) {
   return name;
 }
 
-// add the route
-server.route({
-  method: 'GET',
-  path:'/hello/{name*}',
-  handler: function (request, reply) {
+const application = new Application({
+  // responds to http://localhost:8000/
+  '/': function (request, reply) {
     // read template and compile using context object
     nunjucks.render('index.html', getName(request), function (err, html) {
       // reply with HTML response
       reply(html);
     });
   }
+}, {
+  server: server
 });
 
-// start the server
-server.start();
+application.start();

@@ -10,6 +10,10 @@ var _nunjucks = require('nunjucks');
 
 var _nunjucks2 = _interopRequireDefault(_nunjucks);
 
+var _lib = require('./lib');
+
+var _lib2 = _interopRequireDefault(_lib);
+
 // configure nunjucks to read from the dist directory
 _nunjucks2['default'].configure('./dist');
 
@@ -39,18 +43,17 @@ function getName(request) {
   return name;
 }
 
-// add the route
-server.route({
-  method: 'GET',
-  path: '/hello/{name*}',
-  handler: function handler(request, reply) {
+var application = new _lib2['default']({
+  // responds to http://localhost:8000/
+  '/': function _(request, reply) {
     // read template and compile using context object
     _nunjucks2['default'].render('index.html', getName(request), function (err, html) {
       // reply with HTML response
       reply(html);
     });
   }
+}, {
+  server: server
 });
 
-// start the server
-server.start();
+application.start();
