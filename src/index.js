@@ -1,6 +1,6 @@
 import Hapi from 'hapi';
 import Application from './lib';
-import Controller from './lib/controller'
+import Controller from './lib/controller';
 
 const server = new Hapi.Server();
 server.connection({

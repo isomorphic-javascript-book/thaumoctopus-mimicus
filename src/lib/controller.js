@@ -4,12 +4,12 @@ export default class Controller {
     this.context = context;
   }
 
-  index(application, request, reply, promise) {
-    promise.resolve();
+  index(application, request, reply, callback) {
+    callback(null);
   }
 
-  toString(promise) {
-    promise.resolve('success');
+  toString(callback) {
+    callback(null, 'success');
   }
 
 }

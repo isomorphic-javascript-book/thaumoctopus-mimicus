@@ -11,11 +11,30 @@ export default class Application {
     }
   }
 
-  addRoute(path, handler) {
+  addRoute(path, Controller) {
     this.server.route({
       path: path,
       method: 'GET',
-      handler: handler
+      handler: (request, reply) => {
+        const controller = new Controller({
+          query: request.query,
+          params: request.params
+        });
+
+        controller.index(this, request, reply, (err) => {
+          if (err) {
+            return reply(err);
+          }
+
+          controller.toString((err, html) => {
+            if (err) {
+              return reply(err);
+            }
+
+            reply(html);
+          });
+        });
+      }
     });
   }
 
