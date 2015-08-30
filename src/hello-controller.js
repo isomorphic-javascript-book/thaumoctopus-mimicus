@@ -1,6 +1,8 @@
 import Controller from './lib/controller';
 import nunjucks from 'nunjucks';
 
+nunjucks.configure('./dist');
+
 function getName(context) {
   // default values
   let name = {
@@ -25,7 +27,7 @@ function getName(context) {
 export default class HelloController extends Controller {
 
   toString(callback) {
-    nunjucks.renderString('<p>hello {{fname}} {{lname}}</p>', getName(this.context), (err, html) => {
+    nunjucks.render('hello.html', getName(this.context), (err, html) => {
       if (err) {
         return callback(err, null);
       }
