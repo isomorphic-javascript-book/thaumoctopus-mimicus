@@ -9,27 +9,24 @@ export default class Application {
     }
 
     console.log(url);
-    history.pushState({}, null, null);
+    history.pushState({}, null, url);
   }
 
   start() {
-console.log('START');
-
     this.popStateListener = window.addEventListener('popstate', (e) => {
-      console.log(window.location);
+      console.log(window.location.pathname);
     });
 
     this.clickListener = document.addEventListener('click', (e) => {
-      let { currentTarget } = e;
-      let identifier = currentTarget.dataset.navigate;
-      let href = currentTarget.getAttribute('href');
+      let { target } = e;
+      let identifier = target.dataset.navigate;
+      let href = target.getAttribute('href');
 
-      if (typeof identifier !== undefined) {
+      if (identifier !== undefined) {
         this.navigate(identifier || href);
-      }
-
-      if (href) {
-        e.preventDefault();
+        if (href) {
+          e.preventDefault();
+        }
       }
     });
   }
