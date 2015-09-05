@@ -4,9 +4,18 @@ var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
 var sequence = require('run-sequence');
 var source = require('vinyl-source-stream');
+var nunjucks = require('gulp-nunjucks');
+var concat = require('gulp-concat');
 
 gulp.task('copy', function () {
   return gulp.src('src/**/*.html')
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('compile-templates', function () {
+  return gulp.src('src/**/*.html')
+    .pipe(nunjucks())
+    .pipe(concat('templates.js'))
     .pipe(gulp.dest('dist'));
 });
 
@@ -44,5 +53,5 @@ gulp.task('start', function () {
 });
 
 gulp.task('default', function (callback) {
-  sequence(['watch', 'copy', 'compile'], 'bundle', 'start', callback);
+  sequence(['watch', 'copy', 'compile', 'compile-templates'], 'bundle', 'start', callback);
 });

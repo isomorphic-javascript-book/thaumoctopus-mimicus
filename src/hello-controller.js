@@ -1,7 +1,11 @@
 import Controller from './lib/controller';
 import nunjucks from 'nunjucks';
 
-nunjucks.configure('./dist');
+try {
+  window;
+} catch (e) {
+  nunjucks.configure('./dist');
+}
 
 function getName(context) {
   // default values
@@ -31,6 +35,7 @@ export default class HelloController extends Controller {
       if (err) {
         return callback(err, null);
       }
+
       callback(null, html);
     });
   }
