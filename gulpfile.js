@@ -2,20 +2,11 @@ var gulp = require('gulp');
 var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
-var sequence = require('run-sequence');
 var source = require('vinyl-source-stream');
-var nunjucks = require('gulp-nunjucks');
-var concat = require('gulp-concat');
+var sequence = require('run-sequence');
 
 gulp.task('copy', function () {
   return gulp.src('src/**/*.html')
-    .pipe(gulp.dest('dist'));
-});
-
-gulp.task('compile-templates', function () {
-  return gulp.src('src/**/*.html')
-    .pipe(nunjucks())
-    .pipe(concat('templates.js'))
     .pipe(gulp.dest('dist'));
 });
 
@@ -26,16 +17,15 @@ gulp.task('compile', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', function (callback) {
-    sequence('compile', 'bundle', callback);
-  });
+  gulp.watch('src/**/*.js', ['compile', 'bundle'])
   gulp.watch('src/**/*.html', ['copy']);
 });
 
 gulp.task('bundle', function () {
   var b = browserify({
-    entries: 'dist/index.js',
-    debug: true
+    entries: 'src/index.js',
+    debug: true,
+    transform: ['babelify']
   });
 
   return b.bundle()
@@ -53,5 +43,5 @@ gulp.task('start', function () {
 });
 
 gulp.task('default', function (callback) {
-  sequence(['watch', 'copy', 'compile', 'compile-templates'], 'bundle', 'start', callback);
+  sequence(['compile', 'watch', 'copy', 'bundle'], 'start', callback);
 });

@@ -1,8 +1,7 @@
 export default class Application {
 
   constructor(routes, options) {
-    this.server = options.server;
-    this.document = options.document;
+    this.options = options;
     this.registerRoutes(routes);
   }
 
@@ -13,7 +12,7 @@ export default class Application {
   }
 
   addRoute(path, Controller) {
-    this.server.route({
+    this.options.server.route({
       path: path,
       method: 'GET',
       handler: (request, reply) => {
@@ -32,7 +31,7 @@ export default class Application {
               return reply(err);
             }
 
-            this.document(this, controller, request, reply, html, function (err, html) {
+            this.options.document(this, controller, request, reply, html, (err, html) => {
               if (err) {
                 return reply(err);
               }
@@ -46,7 +45,7 @@ export default class Application {
   }
 
   start() {
-    this.server.start();
+    this.options.server.start();
   }
 
 }

@@ -12,4 +12,15 @@ export default class Controller {
     callback(null, 'success');
   }
 
+  render(target, callback) {
+    this.toString(function (err, body) {
+      if (err) {
+        return callback(err, null);
+      }
+
+      document.querySelector(target).innerHTML = body;
+      callback(null, body);
+    });
+  }
+
 }
