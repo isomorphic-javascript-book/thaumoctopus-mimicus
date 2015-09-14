@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
+var sequence = require('run-sequence');
 
 gulp.task('copy', function () {
   return gulp.src('src/**/*.html')
@@ -27,4 +28,6 @@ gulp.task('start', function () {
   });
 });
 
-gulp.task('default', ['watch', 'copy', 'compile', 'start']);
+gulp.task('default', function (callback) {
+  sequence(['compile', 'watch', 'copy'], 'start', callback);
+});
