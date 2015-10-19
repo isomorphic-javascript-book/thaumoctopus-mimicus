@@ -1,5 +1,7 @@
 import Call from 'call';
 import query from 'query-string';
+import cookie from './cookie.client';
+import replyFactory from './reply.client'
 
 export default class Application {
 
@@ -48,13 +50,18 @@ export default class Application {
       const controller = new Controller({
         // parse search string into object
         query: query.parse(search),
-        params: params
+        params: params,
+        cookie: cookie
       });
 
-      // request and reply stubs; facades will be
-      // implemented in the next chapter
+      // request and reply stubs
       const request = () => {};
-      const reply = () => {};
+      const reply = replyFactory(this);
+
+      if (push) {
+        history.pushState({}, null, url);
+      }
+
       // execute controller action
       controller.index(this, request, reply, (err) => {
         if (err) {
@@ -70,12 +77,6 @@ export default class Application {
           reply(response);
         });
       });
-
-      // only push history stack if push
-      // argument is true
-      if (push) {
-        history.pushState({}, null, url);
-      }
     }
   }
 
