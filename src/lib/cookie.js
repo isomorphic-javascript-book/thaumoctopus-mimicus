@@ -14,7 +14,8 @@ export default function (request, reply) {
   return {
 
     get(name) {
-      return decodeURIComponent(request.state[name]);
+      return request.state[name] && decodeURIComponent(request.state[name]) ||
+        undefined;
     },
 
     set(name, value, options = {}) {

@@ -1,7 +1,7 @@
 import Call from 'call';
 import query from 'query-string';
 import cookie from './cookie.client';
-import replyFactory from './reply.client'
+import replyFactory from './reply.client';
 
 export default class Application {
 

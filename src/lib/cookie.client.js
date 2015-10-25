@@ -3,7 +3,7 @@ import cookie from 'cookies-js';
 export default {
 
   get(name) {
-    return cookie.get(name);
+    return cookie.get(name) || undefined;
   },
 
   set(name, value, options = {}) {
@@ -14,4 +14,4 @@ export default {
     cookie.set(name, value, options);
   }
 
-};
+}
