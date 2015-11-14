@@ -13,7 +13,7 @@ server.connection({
 });
 
 const application = new Application({
-  '/{name*}': HelloController
+  '/hello/{name*}': HelloController
 }, {
   server: server,
   document: function (application, controller, request, reply, body, callback) {
