@@ -6,7 +6,7 @@ import options from './options';
 nunjucks.configure(options.nunjucks);
 
 const application = new Application({
-  '/{name*}': HelloController
+  '/hello/{name*}': HelloController
 }, options);
 
 application.start();
