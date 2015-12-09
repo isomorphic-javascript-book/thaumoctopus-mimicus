@@ -1,6 +1,6 @@
 {
   "name": "thaumoctopus-mimicus",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Isomorphic JavaScript application example",
   "main": "./dist/index.js",
   "scripts": {

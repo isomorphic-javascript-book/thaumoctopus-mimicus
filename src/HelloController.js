@@ -36,7 +36,8 @@ export default class HelloController extends Controller {
 
   toString(callback) {
     // this can be handled more eloquently using Object.assign
-    // but we are not including for the sake of simplicity
+    // but we are not including the polyfill dependency
+    // for the sake of simplicity
     let context = getName(this.context);
     context.data = this.context.data;
 
