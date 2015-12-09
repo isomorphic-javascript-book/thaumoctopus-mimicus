@@ -7,7 +7,6 @@ export default class HomeController extends Controller {
       this.context.cookie.set('greeting', '1', { expires: 1000 * 60 * 60 * 24 * 365 });
     }
 
-    this.context.cookie.set('greeting', '1', { expires: 1000 * 60 * 60 * 24 * 365 });
     return reply.redirect('/hello');
   }
 
