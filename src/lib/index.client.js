@@ -33,27 +33,11 @@ export default class Application {
       return;
     }
 
-    // split the path and search string
-    let urlParts = url.split('?');
-    // destructure url parts array
-    let [path, search] = urlParts;
-    // see if url path matches route in router
-    let match = this.router.route('get', path);
-    // destructure the route path and path path params
-    let { route, params } = match;
-    // look up controller class in routes table
-    let Controller = this.routes[route];
-    // if a route was matched and controller class
-    // was in the routes table then create a
-    // controller instance
-    if (route && Controller) {
-      const controller = new Controller({
-        // parse search string into object
-        query: query.parse(search),
-        params: params,
-        cookie: cookie
-      });
+    let previousController = this.controller;
+    this.controller = this.createController(url)
 
+    // if a controller was created then proceed with navigating
+    if (this.controller) {
       // request and reply stubs
       const request = () => {};
       const reply = replyFactory(this);
@@ -63,18 +47,23 @@ export default class Application {
       }
 
       // execute controller action
-      controller.index(this, request, reply, (err) => {
+      this.controller.index(this, request, reply, (err) => {
         if (err) {
           return reply(err);
         }
 
+        let targetEl = document.querySelector(this.options.target);
+        if (previousController) {
+          previousController.detach(targetEl);
+        }
         // render controller response
-        controller.render(this.options.target, (err, response) => {
+        this.controller.render(this.options.target, (err, response) => {
           if (err) {
             return reply(err);
           }
 
           reply(response);
+          this.controller.attach(targetEl);
         });
       });
     }
@@ -83,9 +72,8 @@ export default class Application {
   start() {
     // create event listener popstate
     this.popStateListener = window.addEventListener('popstate', (e) => {
-      let { pathname, search} = window.location;
-      let url = `${pathname}${search}`;
-      console.log(url);
+      let url = this.getUrl();
+
       this.navigate(url, false);
     });
 
@@ -108,6 +96,42 @@ export default class Application {
         this.navigate(identifier || href);
       }
     });
+
+    this.rehydrate();
+  }
+
+  createController(url) {
+    // split the path and search string
+    let urlParts = url.split('?');
+    // destructure url parts array
+    let [path, search] = urlParts;
+    // see if url path matches route in router
+    let match = this.router.route('get', path);
+    // destructure the route path and path path params
+    let { route, params } = match;
+    // look up controller class in routes table
+    let Controller = this.routes[route];
+
+    return Controller ?
+      new Controller({
+        // parse search string into object
+        query: query.parse(search),
+        params: params,
+        cookie: cookie
+      }) : undefined;
+  }
+
+  getUrl() {
+    let { pathname, search} = window.location;
+    return `${pathname}${search}`;
+  }
+
+  rehydrate() {
+    let targetEl = document.querySelector(this.options.target);
+
+    this.controller = this.createController(this.getUrl());
+    this.controller.deserialize();
+    this.controller.attach(targetEl);
   }
 
 }

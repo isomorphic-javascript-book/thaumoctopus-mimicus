@@ -23,4 +23,20 @@ export default class Controller {
     });
   }
 
+  serialize() {
+    return JSON.stringify(this.context.data || {});
+  }
+
+  deserialize() {
+    this.context.data = JSON.parse(window.__STATE__);
+  }
+
+  attach(el) {
+    // to be implemented by the application
+  }
+
+  detach(el) {
+    // to be implemented by the application
+  }
+
 }
