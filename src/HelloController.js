@@ -1,6 +1,10 @@
 import Controller from './lib/Controller';
 import nunjucks from 'nunjucks';
 
+function onClick(e) {
+  console.log(e.currentTarget);
+}
+
 function getName(context) {
   // default values
   let name = {
@@ -47,9 +51,11 @@ export default class HelloController extends Controller {
 
   attach(el) {
     console.log(this.context.data.random);
-    this.clickHandler = el.addEventListener('click', function (e) {
-      console.log(e.currentTarget);
-    }, false);
+    this.clickHandler = el.addEventListener('click', onClick, false);
+  }
+
+  detach(el) {
+    el.removeEventListener('click', onClick, false);
   }
 
 }
