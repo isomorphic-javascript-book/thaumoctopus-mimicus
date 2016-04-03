@@ -12,7 +12,9 @@ gulp.task('copy', function () {
 
 gulp.task('compile', function () {
   return gulp.src('src/**/*.js')
-    .pipe(babel())
+    .pipe(babel({
+      presets: ['es2015']
+    }))
     .pipe(gulp.dest('dist'));
 });
 
@@ -24,9 +26,9 @@ gulp.task('watch', function () {
 gulp.task('bundle', function () {
   var b = browserify({
     entries: 'src/index.js',
-    debug: true,
-    transform: ['babelify']
-  });
+    debug: true
+  })
+  .transform('babelify', { presets: ['es2015'] });
 
   return b.bundle()
     .pipe(source('build/application.js'))
