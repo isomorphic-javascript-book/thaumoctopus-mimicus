@@ -1,4 +1,4 @@
-import Controller from './lib/Controller';
+import Controller from './lib/controller';
 import nunjucks from 'nunjucks';
 
 function getName(context) {
