@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
-var sequence = require('run-sequence');
 
 gulp.task('copy', function () {
   return gulp.src('src/**/*.html')
@@ -17,8 +16,8 @@ gulp.task('compile', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', ['compile']);
-  gulp.watch('src/**/*.html', ['copy']);
+  gulp.watch('src/**/*.js',  gulp.series('compile'));
+  gulp.watch('src/**/*.html', gulp.series('copy'));
 });
 
 gulp.task('start', function () {
@@ -30,6 +29,8 @@ gulp.task('start', function () {
   });
 });
 
-gulp.task('default', function (callback) {
-  sequence(['compile', 'watch', 'copy'], 'start', callback);
-});
+gulp.task('default', function (){ 
+  return gulp.series( 
+          gulp.parallel('compile', 'watch', 'copy'),
+           'start')();
+}); 
