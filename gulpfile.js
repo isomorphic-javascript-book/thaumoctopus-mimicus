@@ -3,12 +3,13 @@ var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var sequence = require('run-sequence');
+
 
 gulp.task('copy', function () {
   return gulp.src('src/**/*.html')
     .pipe(gulp.dest('dist'));
 });
+
 
 gulp.task('compile', function () {
   return gulp.src('src/**/*.js')
@@ -18,10 +19,13 @@ gulp.task('compile', function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', ['compile', 'bundle'])
-  gulp.watch('src/**/*.html', ['copy']);
+
+gulp.task('watch', function (cb) {
+  gulp.watch('src/**/*.js', gulp.series('compile','bundle'))
+  gulp.watch('src/**/*.html', gulp.series('copy'));
+  cb();
 });
+
 
 gulp.task('bundle', function () {
   var b = browserify({
@@ -35,6 +39,7 @@ gulp.task('bundle', function () {
     .pipe(gulp.dest('dist'));
 });
 
+
 gulp.task('start', function () {
   nodemon({
     watch: 'dist',
@@ -44,6 +49,9 @@ gulp.task('start', function () {
   });
 });
 
-gulp.task('default', function (callback) {
-  sequence(['compile', 'watch', 'copy', 'bundle'], 'start', callback);
+
+gulp.task('default', function (){ 
+  return gulp.series( 
+          gulp.parallel('compile', 'watch', 'copy','bundle'),
+           'start')();
 });
