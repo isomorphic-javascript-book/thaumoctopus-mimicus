@@ -15,9 +15,10 @@ gulp.task('compile', function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function (cb) {
   gulp.watch('src/**/*.js',  gulp.series('compile'));
   gulp.watch('src/**/*.html', gulp.series('copy'));
+  cb();
 });
 
 gulp.task('start', function () {
