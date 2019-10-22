@@ -3,7 +3,7 @@ var babel = require('gulp-babel');
 var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var sequence = require('run-sequence');
+
 
 gulp.task('copy', function () {
   return gulp.src('src/**/*.html')
@@ -19,8 +19,8 @@ gulp.task('compile', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', ['compile', 'bundle'])
-  gulp.watch('src/**/*.html', ['copy']);
+  gulp.watch('src/**/*.js', gulp.series('compile','bundle'));
+  gulp.watch('src/**/*.html', gulp.series('copy'));
 });
 
 gulp.task('bundle', function () {
@@ -44,6 +44,8 @@ gulp.task('start', function () {
   });
 });
 
-gulp.task('default', function (callback) {
-  sequence(['compile', 'watch', 'copy', 'bundle'], 'start', callback);
-});
+gulp.task('default', function (){ 
+  return gulp.series( 
+          gulp.parallel('compile', 'watch', 'copy','bundle'),
+           'start')();
+});  
