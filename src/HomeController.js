@@ -1,4 +1,4 @@
-import Controller from './lib/Controller';
+import Controller from './lib/controller';
 
 export default class HomeController extends Controller {
 
